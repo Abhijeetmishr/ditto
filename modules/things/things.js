@@ -1,0 +1,99 @@
+/*
+* Copyright (c) 2022 Contributors to the Eclipse Foundation
+*
+* See the NOTICE file(s) distributed with this work for additional
+* information regarding copyright ownership.
+*
+* This program and the accompanying materials are made available under the
+* terms of the Eclipse Public License 2.0 which is available at
+* http://www.eclipse.org/legal/epl-2.0
+*
+* SPDX-License-Identifier: EPL-2.0
+*/
+/* eslint-disable require-jsdoc */
+// @ts-check
+import * as API from '../api.js';
+
+import * as Environments from '../environments/environments.js';
+import * as Utils from '../utils.js';
+import * as ThingsSearch from './thingsSearch.js';
+
+export let theThing;
+
+const observers = [];
+
+const dom = {
+  collapseThings: null,
+  tabThings: null,
+};
+
+/**
+ * Adds a listener function for the currently selected thing
+ * @param {function} observer function that will be called if the current thing was changed
+ */
+export function addChangeListener(observer) {
+  observers.push(observer);
+}
+
+/**
+ * Initializes components. Should be called after DOMContentLoaded event
+ */
+export async function ready() {
+  Environments.addChangeListener(onEnvironmentChanged);
+
+  Utils.getAllElementsById(dom);
+
+  dom.tabThings.onclick = onTabActivated;
+}
+
+/**
+ * Load thing from Ditto and update all UI components
+ * @param {String} thingId ThingId
+ * @param {function} successCallback callback function that is called after refresh is finished
+ */
+export function refreshThing(thingId, successCallback) {
+  console.assert(thingId && thingId !== '', 'thingId expected');
+  API.callDittoREST('GET',
+      `/things/${thingId}?` +
+      'fields=thingId%2CpolicyId%2Cdefinition%2Cattributes%2Cfeatures%2C_created%2C_modified%2C_revision')
+      .then((thing) => {
+        setTheThing(thing);
+        successCallback && successCallback();
+      })
+      .catch(() => setTheThing());
+}
+
+/**
+ * Update all UI components for the given Thing
+ * @param {Object} thingJson Thing json
+ */
+export function setTheThing(thingJson) {
+  const isNewThingId = thingJson && (!theThing || theThing.thingId !== thingJson.thingId);
+  theThing = thingJson;
+  observers.forEach((observer) => observer.call(null, theThing, isNewThingId));
+}
+
+let viewDirty = false;
+
+function onTabActivated() {
+  if (viewDirty) {
+    refreshView();
+    viewDirty = false;
+  }
+  // dom.searchFilterEdit.focus();
+}
+
+function onEnvironmentChanged(modifiedField) {
+  if (!['pinnedThings', 'filterList', 'messageTemplates'].includes(modifiedField)) {
+    if (dom.collapseThings.classList.contains('show')) {
+      refreshView();
+    } else {
+      viewDirty = true;
+    }
+  }
+}
+
+function refreshView() {
+  ThingsSearch.performLastSearch();
+}
+

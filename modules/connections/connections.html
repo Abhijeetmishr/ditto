@@ -1,0 +1,189 @@
+<!--
+  ~ Copyright (c) 2022 Contributors to the Eclipse Foundation
+  ~
+  ~ See the NOTICE file(s) distributed with this work for additional
+  ~ information regarding copyright ownership.
+  ~
+  ~ This program and the accompanying materials are made available under the
+  ~ terms of the Eclipse Public License 2.0 which is available at
+  ~ http://www.eclipse.org/legal/epl-2.0
+  ~
+  ~ SPDX-License-Identifier: EPL-2.0
+  -->
+<h5 data-bs-toggle="collapse" data-bs-target="#connectionsEdit">
+    Manage Connections
+</h5>
+<hr />
+<div class="collapse show" id="connectionsEdit">
+    <div class="row resizable_pane" style="height: 80vh;">
+        <div class="col-md-4 resizable_flex_column">
+            <div class="input-group input-group-sm mt-1 mb-1" role="group">
+                <div style="flex-grow: 1;"></div>
+                <button class="btn btn-outline-secondary btn-sm button_round_left" id="buttonLoadConnections">
+                    <i class="bi bi-arrow-clockwise"></i>
+                    Refresh
+                </button>
+            </div>
+            <div class="input-group has-validation">
+                <input class="form-control" id="tableValidationConnections" hidden="true"></input>
+                <div class="invalid-feedback"></div>
+            </div>
+            <div class="table-wrap mb-1">
+                <table class="table table-striped table-hover table-sm">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Live Status</th>
+                            <th>Recovery Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbodyConnections"></tbody>
+                </table>
+            </div>
+        </div>
+        <div class="col-md-8 resizable_flex_column">
+            <h6>CRUD Connection</h6>
+            <crud-toolbar label="Connection Id" id="crudConnection" style="flex-grow: 1;">
+                <div class="input-group input-group-sm mb-1">
+                    <label class="input-group-text">Template</label>
+                    <div class="btn-group dropend">
+                        <button class="btn btn-outline-secondary btn-sm dropdown-toggle"
+                        data-bs-toggle="dropdown" id="buttonConnectionTemplates" disabled></button>
+                        <ul id="ulConnectionTemplates" class="dropdown-menu" style="position: fixed; top: auto;"></ul>                                    
+                    </div>
+                    <input type="text" class="form-control form-control-sm" id="inputConnectionTemplate" disabled></input>
+                </div>
+                <div class="input-group has-validation">
+                    <input class="form-control" id="editorValidationConnection" hidden="true"></input>
+                    <div class="invalid-feedback"></div>
+                </div>
+                <div class="row mb-1" style="flex-grow: 1;">
+                    <div class="col-md-6 resizable_flex_column">
+                        <div class="ace_container" style="flex-grow: 1;">
+                            <div class="script_editor" id="connectionEditor"></div>
+                        </div>        
+                    </div>
+                    <div class="col-md-6 resizable_flex_column">
+                        <h6>Incoming JavaScript Mapping</h6>
+                        <div class="ace_container mb-3" style="flex-grow: 1;">
+                            <div class="script_editor" id="connectionIncomingScript"></div>
+                        </div>
+                        <h6>Outgoing JavaScript Mapping</h6>
+                        <div class="ace_container" style="flex-grow: 1;">
+                            <div class="script_editor" id="connectionOutgoingScript"></div>
+                        </div>        
+                    </div>
+                </div>
+            </crud-toolbar>
+        </div>
+    </div>
+</div>
+<h5 data-bs-toggle="collapse" data-bs-target="#tabConnectionHelper">
+    Connection Status, Metrics and Logs
+</h5>
+<hr />
+<div class="collapse show" id="tabConnectionHelper">
+    <div class="row resizable_pane" style="height: 80vh;">
+        <div class="col-md-4 resizable_flex_column">
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                    <a class="nav-link active" data-bs-toggle="tab" data-bs-target="#tabConnectionMetrics">Metrics</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="tab" data-bs-target="#tabConnectionStatus">Status</a>
+                </li>
+            </ul>
+            <div class="tab-content" style="flex-grow: 1; overflow: hidden">
+                <div class="tab-pane container active no-margin" id="tabConnectionMetrics">
+                    <div class="resizable_flex_column">
+                        <div class="input-group input-group-sm mb-1 mt-1">
+                            <button class="btn btn-outline-secondary btn-sm button_round_both"
+                                id="buttonResetConnectionMetrics" data-bs-toggle="tooltip"
+                                title="Reset connection metrics for the selected connection">
+                                <i class="bi bi-x-circle"></i>
+                                Reset
+                            </button>
+                            <div class="form-control-sm" style="flex-grow: 1;"></div>
+                            <button class="btn btn-outline-secondary btn-sm button_round_both"
+                                id="buttonRetrieveConnectionMetrics" data-bs-toggle="tooltip"
+                                title="Refresh connection metrics for the selected connection">
+                                <i class="bi bi-arrow-clockwise"></i>
+                                Refresh
+                            </button>
+                        </div>
+                        <div class="table-wrap">
+                            <table class="table table-striped table-hover table-sm">
+                                <thead>
+                                    <tr>
+                                        <th>Direction</th>
+                                        <th>Type</th>
+                                        <th>Level</th>
+                                        <th>1m</th>
+                                        <th>1h</th>
+                                        <th>24h</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tbodyConnectionMetrics"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane container fade no-margin" id="tabConnectionStatus">
+                    <div class="resizable_flex_column">
+                        <div class="input-group input-group-sm mb-1 mt-1">
+                            <div class="form-control-sm" style="flex-grow: 1;"></div>
+                            <button class="btn btn-outline-secondary btn-sm button_round_both"
+                                id="buttonRetrieveConnectionStatus" data-bs-toggle="tooltip"
+                                title="Refresh connection status">
+                                <i class="bi bi-arrow-clockwise"></i>
+                                Refresh
+                            </button>
+                        </div>
+                        <div class="ace_container" style="flex-grow: 1;">
+                            <div class="script_editor" id="connectionStatusDetail"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 resizable_flex_column">
+            <h6>Connection Logs</h6>
+            <div class="input-group input-group-sm mb-1">
+                <button class="btn btn-outline-secondary btn-sm button_round_left" id="buttonEnableConnectionLogs"
+                    data-bs-toggle="tooltip" title="Click to enable connection logs for the selected connection">
+                    <i class="bi bi-toggle-off"></i>
+                    <span>Enable</span>
+                </button>
+                <button class="btn btn-outline-secondary btn-sm button_round_right" id="buttonResetConnectionLogs"
+                    data-bs-toggle="tooltip" title="Reset connection logs for the selected connection">
+                    <i class="bi bi-x-circle"></i>
+                    Reset
+                </button>
+                <div class="form-control-sm" style="flex-grow: 1;"></div>
+                <button class="btn btn-outline-secondary btn-sm button_round_both" id="buttonRetrieveConnectionLogs"
+                    data-bs-toggle="tooltip" title="Refresh connection logs for the selected connection">
+                    <i class="bi bi-arrow-clockwise"></i>
+                    Refresh
+                </button>
+            </div>
+            <div class="table-wrap">
+                <table class="table table-striped table-hover table-sm">
+                    <thead>
+                        <tr>
+                            <th>Timestamp</th>
+                            <th>Type</th>
+                            <th>Level</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbodyConnectionLogs"></tbody>
+                </table>
+            </div>
+        </div>
+        <div class="col-md-4 resizable_flex_column">
+            <h6>Connection Log Detail</h6>
+            <div class="ace_container" style="flex-grow: 1;">
+                <div class="script_editor" id="connectionLogDetail"></div>
+            </div>
+        </div>
+    </div>
+</div>

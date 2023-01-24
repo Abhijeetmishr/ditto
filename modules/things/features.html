@@ -1,0 +1,56 @@
+<!--
+  ~ Copyright (c) 2022 Contributors to the Eclipse Foundation
+  ~
+  ~ See the NOTICE file(s) distributed with this work for additional
+  ~ information regarding copyright ownership.
+  ~
+  ~ This program and the accompanying materials are made available under the
+  ~ terms of the Eclipse Public License 2.0 which is available at
+  ~ http://www.eclipse.org/legal/epl-2.0
+  ~
+  ~ SPDX-License-Identifier: EPL-2.0
+  -->
+<h5 data-bs-toggle="collapse" data-bs-target="#collapseFeatures">
+    Features <span class="badge rounded-pill bg-info" id="badgeFeatureCount"></span></h5>
+<hr />
+<div class="collapse show" id="collapseFeatures">
+    <div class="row resizable_pane" style="height: 45vh;">
+        <div class="col-md-4 resizable_flex_column">
+            <div class="input-group has-validation">
+                <input class="form-control" id="tableValidationFeature" hidden="true"></input>
+                <div class="invalid-feedback"></div>
+            </div>
+            <div class="table-wrap">
+                <table class="table table-striped table-hover table-sm">
+                    <tbody id="tbodyFeatures"></tbody>
+                </table>
+            </div>
+        </div>
+        <div class="col-md-8 resizable_flex_column">
+            <ul class="nav nav-tabs" id="tabItemsFeatures">
+                <li class="nav-item">
+                    <a class="nav-link active" data-bs-toggle="tab" data-bs-target="#tabCrudFeature">CRUD Feature</a>
+                </li>
+            </ul>
+            <div class="tab-content" style="flex-grow: 1;" id="tabContentFeatures">
+                <div class="tab-pane container active no-margin" id="tabCrudFeature">
+                    <crud-toolbar id="crudFeature" label="Feature ID">
+                        <div class="input-group input-group-sm mb-1">
+                            <label class="input-group-text">Definition</label>
+                            <input type="text" class="form-control" id="inputFeatureDefinition" disabled></input>
+                        </div>
+                        <div class="input-group input-group-sm mb-1" style="flex-grow: 1; display: flex;">
+                            <label class="input-group-text">Properties<br>and<br>Desired<br>Properties</label>
+                            <div class="ace_container" style="flex-grow: 1;">
+                                <div class="script_editor" id="featurePropertiesEditor"></div>
+                            </div>
+                            <div class="ace_container" style="flex-grow: 1;">
+                                <div class="script_editor" id="featureDesiredPropertiesEditor"></div>
+                            </div>
+                        </div>
+                    </crud-toolbar>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
